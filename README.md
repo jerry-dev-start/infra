@@ -1,7 +1,7 @@
 <div align="center">
   <h1 align="center">GP Base Package</h1>
   <p align="center">
-    一个为快速开发而生的 Go 语言基础设施包
+    🚀 一个为快速开发而生的 Go 语言基础设施包
   <p>
 </div>
 
