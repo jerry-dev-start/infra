@@ -1,6 +1,8 @@
 <div align="center">
-GP Base Package
-🚀 基于 Gin / GORM / Redis 的企业级 Go 基础开发套件
+  <h1 align="center">GP Base Package</h1>
+  <p align="center">
+    一个为快速开发而生的 Go 语言基础设施包
+  <p>
 </div>
 
 **GP Base Package** 是一个面向 Go 语言 Web 开发的高性能基础库。它深度集成并二次封装了 Gin、GORM 和 Redis，旨在通过标准化的配置和开箱即用的核心组件，帮助开发者快速构建稳定、规范的 Web 服务。
