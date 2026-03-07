@@ -77,9 +77,14 @@ func (s *Server) StartWeb() {
 
 // RegisterRouter 批量注册路由
 // 参数 route.IRouter 接口的实列
-func (s *Server) RegisterRouter(routes []route.IRouter) {
+func (s *Server) RegisterRouter(routes ...route.IRouter) {
+	PublicGroup := s.Engine.Group(s.cnf.Server.GetRouterPrefix())
+	PrivateGroup := s.Engine.Group(s.cnf.Server.GetRouterPrefix())
+
+	//这里要给 PrivateGroup 加入认证的中间件
 	for _, r := range routes {
-		r.Register(s.Engine)
+		r.Register(s.Engine, PublicGroup, PrivateGroup)
 	}
+
 	log.Println("Routers registered successfully.")
 }

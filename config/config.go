@@ -24,9 +24,10 @@ func GetConfig() *Config {
 }
 
 type Server struct {
-	Port  *int    `mapstructure:"port"`
-	Host  *string `mapstructure:"host"`
-	Model *string `mapstructure:"model"`
+	Port         *int    `mapstructure:"port"`
+	Host         *string `mapstructure:"host"`
+	Model        *string `mapstructure:"model"`
+	RouterPrefix *string `mapstructure:"prefix"`
 }
 
 func (s *Server) GetModel() string {
@@ -34,6 +35,13 @@ func (s *Server) GetModel() string {
 		return "release"
 	}
 	return *s.Model
+}
+
+func (s *Server) GetRouterPrefix() string {
+	if s == nil || s.RouterPrefix == nil {
+		return ""
+	}
+	return *s.RouterPrefix
 }
 
 // GetHost 获取主机地址
