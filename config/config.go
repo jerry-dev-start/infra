@@ -14,6 +14,15 @@ type Config struct {
 	Server *Server `mapstructure:"server"`
 }
 
+// GetConfig 获取序列化的后配置
+func GetConfig() *Config {
+	if conf == nil {
+		// 确保即使有人忘记调用 Init，程序也会以明确的方式失败
+		panic("config not initialized, please call config.Init() first")
+	}
+	return conf
+}
+
 type Server struct {
 	Port  *int    `mapstructure:"port"`
 	Host  *string `mapstructure:"host"`
