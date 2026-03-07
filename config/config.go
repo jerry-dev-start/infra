@@ -27,6 +27,22 @@ func (s *Server) GetModel() string {
 	return *s.Model
 }
 
+// GetHost 获取主机地址
+func (s *Server) GetHost() string {
+	if s == nil || s.Host == nil {
+		return "127.0.0.1"
+	}
+	return *s.Host
+}
+
+// GetPort 获取端口号
+func (s *Server) GetPort() int {
+	if s == nil || s.Port == nil {
+		return 8888
+	}
+	return *s.Port
+}
+
 // Init 初始化基础包的全局配置。
 // 该方法会执行以下操作：
 //  1. 加载配置文件，如果命令行指定了使用指定的，没有指定使用 ./config.yml
