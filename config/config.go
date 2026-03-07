@@ -11,7 +11,8 @@ import (
 var conf = new(Config)
 
 type Config struct {
-	Server *Server `mapstructure:"server"`
+	Server      *Server      `mapstructure:"server"`
+	MysqlConfig *MysqlConfig `mapstructure:"mysql_config"`
 }
 
 // GetConfig 获取序列化的后配置
@@ -27,7 +28,15 @@ type Server struct {
 	Port         *int    `mapstructure:"port"`
 	Host         *string `mapstructure:"host"`
 	Model        *string `mapstructure:"model"`
+	DbType       *string `mapstructure:"db_type"`
 	RouterPrefix *string `mapstructure:"prefix"`
+}
+
+func (s *Server) GetDbType() string {
+	if s == nil || s.DbType == nil {
+		return "mysql"
+	}
+	return *s.DbType
 }
 
 func (s *Server) GetModel() string {
@@ -66,7 +75,7 @@ func (s *Server) GetPort() int {
 //
 // 注意：如果配置文件不存在、格式错误或数据库无法连接，该方法将直接触发 panic。
 // 在主服务启动初期（main 函数内）应当首先调用此方法。
-func Init() *viper.Viper {
+func Init() *Config {
 	// 读取命令行中的配置文件，如果有的话使用命令行指定的
 	var configFilePath = pflag.StringP("config", "c", "./config.yml", "config file path")
 	pflag.Parse()
@@ -96,5 +105,5 @@ func Init() *viper.Viper {
 	if err := v.Unmarshal(&conf); err != nil {
 		panic(fmt.Errorf("Failed to unmarshal configuration into Config struct.: %s \n", err))
 	}
-	return v
+	return conf
 }

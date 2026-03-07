@@ -18,13 +18,15 @@ import (
 
 type Server struct {
 	Engine     *gin.Engine
-	cnf        *config.Config
+	Cnf        *config.Config
 	httpServer *http.Server
 	Close      func()
+	// 增加一个字段存放中间件
+	AuthMiddleware gin.HandlerFunc
 }
 
 // NewServer 创建Server
-func NewServer(conf *config.Config) *Server {
+func NewServer(conf *config.Config, AuthMiddleware gin.HandlerFunc) *Server {
 	if conf.Server == nil {
 		panic("Server configuration not found.")
 	}
@@ -33,14 +35,16 @@ func NewServer(conf *config.Config) *Server {
 	ginEngine := gin.Default()
 
 	return &Server{
-		Engine: ginEngine,
+		Engine:         ginEngine,
+		AuthMiddleware: AuthMiddleware,
+		Cnf:            conf,
 	}
 }
 
 // StartWeb 启动Web服务
 func (s *Server) StartWeb() {
 	// 拼接地址
-	address := fmt.Sprintf("%s:%d", s.cnf.Server.GetHost(), s.cnf.Server.GetPort())
+	address := fmt.Sprintf("%s:%d", s.Cnf.Server.GetHost(), s.Cnf.Server.GetPort())
 
 	s.httpServer = &http.Server{
 		Addr:    address,
@@ -78,10 +82,13 @@ func (s *Server) StartWeb() {
 // RegisterRouter 批量注册路由
 // 参数 route.IRouter 接口的实列
 func (s *Server) RegisterRouter(routes ...route.IRouter) {
-	PublicGroup := s.Engine.Group(s.cnf.Server.GetRouterPrefix())
-	PrivateGroup := s.Engine.Group(s.cnf.Server.GetRouterPrefix())
+	PublicGroup := s.Engine.Group(s.Cnf.Server.GetRouterPrefix())
+	PrivateGroup := s.Engine.Group(s.Cnf.Server.GetRouterPrefix())
 
 	//这里要给 PrivateGroup 加入认证的中间件
+	if s.AuthMiddleware != nil {
+		PrivateGroup.Use(s.AuthMiddleware)
+	}
 	for _, r := range routes {
 		r.Register(s.Engine, PublicGroup, PrivateGroup)
 	}
