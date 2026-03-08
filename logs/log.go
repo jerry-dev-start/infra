@@ -2,6 +2,7 @@ package logs
 
 import (
 	"os"
+	"time"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -12,7 +13,9 @@ import (
 func InitLogger() *zap.SugaredLogger {
 	zapConfig := zap.NewDevelopmentEncoderConfig()
 	// 自定义时间格式，默认是浮点数，改为人类可读格式
-	zapConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	zapConfig.EncodeTime = func(time time.Time, enc zapcore.PrimitiveArrayEncoder) {
+		enc.AppendString(time.Format("2006-01-02 15:04:05"))
+	}
 	// 关键字大写
 	zapConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 
