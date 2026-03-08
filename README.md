@@ -17,13 +17,13 @@
 项目结构：
 ```Plaintext
 gp-base/
-├── core/           # 核心逻辑 (启动器、全局上下文)
-├── config/         # 配置解析与全局 Config 结构体
-├── database/       # GORM 封装与初始化
-├── cache/          # Redis 封装与连接池管理
-├── middleware/     # 常用 Gin 中间件 (日志、跨域、鉴权)
-├── response/       # 统一返回格式封装
-└── pkg/            # 通用工具函数 (加密、时间、转换)
+├── config/         # 配置文件解析并序列化
+├── global/         # 全局使用的组件，如：日志、数据库等
+├── inits/          # 所有组件都在这里初始化
+├── logs/           # 日志Zap初始化
+├── route/          # 路由相关
+├── server/         # 服务启动相关
+└── utils/          # 一直可以直接使用的工具包
 ```
 
 ## 快速上手
@@ -38,22 +38,25 @@ go get github.com/jerry-dev-start/infra
 package main
 
 import (
-    "github.com/yourname/gp-base/core"
-    "github.com/yourname/gp-base/config"
+	"github.com/gin-gonic/gin"
+	"github.com/jerry-dev-start/infra/config"
+	"github.com/jerry-dev-start/infra/global"
+	bp "github.com/jerry-dev-start/infra/inits"
+	"github.com/jerry-dev-start/infra/server"
 )
 
 func main() {
-    // 1. 加载配置
-    cfg := config.MustLoad("config.yaml")
+	global.VM_CNF = config.Init()
+	s := server.NewServer(global.VM_CNF, func(context *gin.Context) {
 
-    // 2. 初始化底层基础组件 (DB, Redis 等)
-    app := core.NewApp(cfg)
-    
-    // 3. 注册路由并启动
-    app.Router.GET("/ping", func(c *gin.Context) {
-        response.Success(c, "pong")
-    })
-    
-    app.Run(":8080")
+	})
+	// 初始化基础包中的部件
+	bp.InitializeComponents()
+	//初始化路由
+	s.RegisterRouter(
+		&route.AuthRouter{},
+	)
+	global.VM_LOG.Info("初始化成功，下面启动服务...")
+	s.StartWeb()
 }
 ```

@@ -7,14 +7,14 @@ import (
 
 // 定义 Banner 字符串
 const banner = `
-   ______   _____  _   __
-  / ____/  /  _/ |/ /  / /
- / / __    / / |   /  / / 
-/ /_/ /  _/ / /   |  /_/  
-\____/  /___//_/|_| (_)   
+  ____  ____    ____                        
+ / ___||  _ \  | __ )   __ _  ___   ___     
+| |  _ | |_) | |  _ \  / _' |/ __| / _ \    
+| |_| ||  __/  | |_) || (_| |\__ \|  __/    
+ \____||_|     |____/  \__,_||___/ \___| 
                           
- Gin Framework - Custom Base Starter
- Version: v1.0.0
+ GP Base Framework | VDream Co., Ltd.
+ Copyright (c) 2026. All rights reserved.
 `
 
 func PrintBanner() {
