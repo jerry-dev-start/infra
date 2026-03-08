@@ -7,6 +7,8 @@ import (
 
 // InitializeComponents 初始化各部件的方法
 func InitializeComponents() {
+	//打印 Banner
+	logs.PrintBanner()
 	// 初始化日志
 	global.VM_LOG = logs.InitLogger()
 	// 初始化 Gorm
