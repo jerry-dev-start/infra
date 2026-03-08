@@ -13,6 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jerry-dev-start/infra/config"
+	"github.com/jerry-dev-start/infra/global"
 	"github.com/jerry-dev-start/infra/route"
 )
 
@@ -52,7 +53,7 @@ func (s *Server) StartWeb() {
 	}
 
 	go func() {
-		log.Printf("Start web server at %s", address)
+		global.VM_LOG.Info("Start web server at {}", address)
 		if err := s.httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("Failed to start server: %v", err)
 		}
@@ -93,5 +94,5 @@ func (s *Server) RegisterRouter(routes ...route.IRouter) {
 		r.Register(s.Engine, PublicGroup, PrivateGroup)
 	}
 
-	log.Println("Routers registered successfully.")
+	global.VM_LOG.Info("Routers registered successfully.")
 }

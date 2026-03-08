@@ -10,5 +10,5 @@ var (
 	// VM_DB 是全局数据库对象
 	VM_DB  *gorm.DB
 	VM_CNF *config.Config
-	VM_LOG *zap.Logger
+	VM_LOG *zap.SugaredLogger
 )

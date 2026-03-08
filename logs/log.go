@@ -9,7 +9,7 @@ import (
 
 // InitLogger 初始化日志框架
 // 日志的框架是使用的 Zap
-func InitLogger() *zap.Logger {
+func InitLogger() *zap.SugaredLogger {
 	zapConfig := zap.NewDevelopmentEncoderConfig()
 	// 自定义时间格式，默认是浮点数，改为人类可读格式
 	zapConfig.EncodeTime = zapcore.ISO8601TimeEncoder
@@ -23,5 +23,6 @@ func InitLogger() *zap.Logger {
 	)
 	// zap.AddCaller() 会在日志中显示调用函数的文件名和行号
 	log := zap.New(core, zap.AddCaller())
-	return log
+
+	return log.Sugar()
 }
