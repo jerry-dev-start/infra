@@ -23,6 +23,7 @@ func GormMysqlInit() *gorm.DB {
 	if db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{}); err != nil {
 		panic(err)
 	} else {
+		global.VM_LOG.Info("Mysql init success")
 		return db
 	}
 }
