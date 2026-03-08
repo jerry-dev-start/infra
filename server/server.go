@@ -53,7 +53,7 @@ func (s *Server) StartWeb() {
 	}
 
 	go func() {
-		global.VM_LOG.Info("Start web server at {}", address)
+		global.VM_LOG.Info("Start web server at ", address)
 		if err := s.httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("Failed to start server: %v", err)
 		}
